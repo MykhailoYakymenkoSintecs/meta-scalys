@@ -12,8 +12,12 @@ IMAGE_FSTYPES = "wic tar.gz ext2.gz"
 
 IMAGE_INSTALL += "\
     optee-test-qoriq \
-    u-boot-mmc-boot \
+    iotedge \
+    aziot-edged \
+    aziotd \
+    aziot-keys \
     composite-firmware \
+    u-boot-mmc-boot \
 "
 
 TOOLCHAIN_HOST_TASK += "nativesdk-cmake"

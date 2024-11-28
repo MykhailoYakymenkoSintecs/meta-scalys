@@ -1,0 +1,55 @@
+From eb54b5c77cd3f2d0a4a01fd7bc64c809465e319c Mon Sep 17 00:00:00 2001
+From: Ting Liu <ting.liu@nxp.com>
+Date: Fri, 9 Oct 2020 21:15:34 +0530
+Subject: [PATCH] add typedef to avoid multiple definition issue
+
+powerpc-fsl-linux-ld: board/freescale/t102xrdb/cpld.o:board/freescale/t102xrdb/cpld.h:24: multiple definition of `cpld_data_t'; board/freescale/t102xrdb/t102xrdb.o:board/freescale/t102xrdb/cpld.h:24: first defined here
+.../scripts/Makefile.build:355: recipe for target 'board/freescale/t102xrdb/built-in.o' failed
+make[2]: *** [board/freescale/t102xrdb/built-in.o] Error 1
+
+Signed-off-by: Ting Liu <ting.liu@nxp.com>
+---
+ board/freescale/t102xrdb/cpld.h | 2 +-
+ board/freescale/t104xrdb/cpld.h | 2 +-
+ board/freescale/t208xrdb/cpld.h | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/board/freescale/t102xrdb/cpld.h b/board/freescale/t102xrdb/cpld.h
+index bd40cc319a8..5060d897225 100644
+--- a/board/freescale/t102xrdb/cpld.h
++++ b/board/freescale/t102xrdb/cpld.h
+@@ -4,7 +4,7 @@
+  *
+  */
+ 
+-struct cpld_data {
++typedef struct cpld_data {
+ 	u8 cpld_ver;		/* 0x00 - CPLD Major Revision Register */
+ 	u8 cpld_ver_sub;	/* 0x01 - CPLD Minor Revision Register */
+ 	u8 hw_ver;		/* 0x02 - Hardware Revision Register */
+diff --git a/board/freescale/t104xrdb/cpld.h b/board/freescale/t104xrdb/cpld.h
+index 0384202fbcb..84329f8a5f6 100644
+--- a/board/freescale/t104xrdb/cpld.h
++++ b/board/freescale/t104xrdb/cpld.h
+@@ -9,7 +9,7 @@
+ /*
+  * CPLD register set. Feel free to add board-specific #ifdefs where necessary.
+  */
+-struct cpld_data {
++typedef struct cpld_data {
+ 	u8 cpld_ver;		/* 0x00 - CPLD Major Revision Register */
+ 	u8 cpld_ver_sub;	/* 0x01 - CPLD Minor Revision Register */
+ 	u8 hw_ver;		/* 0x02 - Hardware Revision Register */
+diff --git a/board/freescale/t208xrdb/cpld.h b/board/freescale/t208xrdb/cpld.h
+index 3139c2b85fd..2dea370d5fb 100644
+--- a/board/freescale/t208xrdb/cpld.h
++++ b/board/freescale/t208xrdb/cpld.h
+@@ -7,7 +7,7 @@
+ /*
+  * CPLD register set of T2080RDB board-specific.
+  */
+-struct cpld_data {
++typedef struct cpld_data {
+ 	u8 chip_id1;		/* 0x00 - Chip ID1 register */
+ 	u8 chip_id2;		/* 0x01 - Chip ID2 register */
+ 	u8 hw_ver;		/* 0x02 - Hardware Revision Register */

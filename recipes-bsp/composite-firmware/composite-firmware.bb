@@ -1,11 +1,11 @@
 DESCRIPTION = "Composite QSPI firmware"
 
-LICENSE = "BSD"
+LICENSE = "BSD-3-Clause"
 
 inherit deploy
 
-DEPENDS += "atf ppfe-firmware"
-do_compile[depends] += "atf:do_deploy ppfe-firmware:do_deploy"
+DEPENDS += "qoriq-atf ppfe-firmware"
+do_compile[depends] += "qoriq-atf:do_deploy ppfe-firmware:do_deploy"
 
 COMPATIBLE_MACHINE = "(qoriq)"
 
@@ -18,9 +18,9 @@ do_compile() {
 }
 
 do_install() {
-    install -d ${D}/boot
-    cp -r ${S}/firmware.bin ${D}/boot
-    chown -R root:root ${D}
+	install -d ${D}/boot
+	cp -r ${S}/firmware.bin ${D}/boot
+	chown -R root:root ${D}
 }
 
 do_deploy() {
@@ -29,6 +29,6 @@ do_deploy() {
 }
 
 addtask deploy after do_install
-FILES_${PN} += "/boot"
+FILES:${PN} += "/boot"
 BBCLASSEXTEND = "native nativesdk"
 

@@ -1,0 +1,382 @@
+From 056d8a2bf3afa05126babd661156087dcfd9065e Mon Sep 17 00:00:00 2001
+From: Mikalai Ramanovich <mikalai.ramanovich@sintecs.eu>
+Date: Thu, 14 Nov 2024 16:27:51 +0200
+Subject: [PATCH] Port Trustbox Edge devices
+
+---
+ arch/arm64/boot/dts/freescale/Makefile        |   3 +
+ .../boot/dts/freescale/scalys-tbe101.dts      | 180 ++++++++++++++++++
+ .../boot/dts/freescale/scalys-tbe401.dts      | 163 ++++++++++++++++
+ 3 files changed, 346 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/scalys-tbe101.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/scalys-tbe401.dts
+
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index 6959e1e016b2..6f5d3e1d5267 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -47,6 +47,9 @@ dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-lx2160a-honeycomb.dtb
+ dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-lx2160a-qds.dtb
+ dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-lx2160a-rdb.dtb
+ dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-lx2162a-qds.dtb
++dtb-$(CONFIG_ARCH_LAYERSCAPE) += scalys-tbe101.dtb
++dtb-$(CONFIG_ARCH_LAYERSCAPE) += scalys-tbe401.dtb
++
+ 
+ fsl-ls1028a-qds-13bb-dtbs := fsl-ls1028a-qds.dtb fsl-ls1028a-qds-13bb.dtbo
+ fsl-ls1028a-qds-65bb-dtbs := fsl-ls1028a-qds.dtb fsl-ls1028a-qds-65bb.dtbo
+diff --git a/arch/arm64/boot/dts/freescale/scalys-tbe101.dts b/arch/arm64/boot/dts/freescale/scalys-tbe101.dts
+new file mode 100644
+index 000000000000..a43190425a54
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/scalys-tbe101.dts
+@@ -0,0 +1,180 @@
++/*
++ * Device Tree file for Scalys Trustbox.
++ * 
++ * Copyright 2019 Scalys B.V.
++ *
++ * Copyright 2016 Freescale Semiconductor, Inc.
++ *     
++ *     This library is free software; you can redistribute it and/or
++ *     modify it under the terms of the GNU General Public License as
++ *     published by the Free Software Foundation; either version 2 of the
++ *     License, or (at your option) any later version.
++ *
++ *     This library is distributed in the hope that it will be useful,
++ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *     GNU General Public License for more details.
++ */
++/dts-v1/;
++
++#include "fsl-ls1012a.dtsi"
++#include <dt-bindings/net/ti-dp83867.h>
++
++/ {
++	model = "Trustbox Edge 101";
++	compatible = "fsl,ls1012a";
++
++	aliases {
++		ethernet0 = &pfe_mac0;
++		ethernet1 = &pfe_mac1;
++		serial0 = &duart0;
++		usb = &usb0;
++	};
++};
++
++/delete-node/ &cpu_thermal;
++
++&usb0 {
++	/delete-property/ dma-coherent;
++};
++
++&duart0 {
++	status = "okay";
++};
++
++&i2c0 {
++	status = "okay";
++};
++
++&dspi {
++        bus-num = <0>;
++        status = "okay";
++};
++
++&qspi {
++	status = "okay";
++	qflash0: s25fs512s@0 {
++		compatible = "spansion,m25p80";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		spi-max-frequency = <20000000>;
++		m25p,fast-read;
++		reg = <0>;
++		spi-rx-bus-width = <1>;
++		spi-tx-bus-width = <1>;
++	};
++};
++
++&sata {
++	status = "okay";
++};
++
++&gpio0 {
++		ngpios = <32>;
++		gpio-line-names =   "RPI_GPIO1_00", /* UART_TXD */
++							"RPI_GPIO1_01", /* UART_RXD */
++							"RPI_GPIO1_02", /* I2C_SCL */
++							"RPI_GPIO1_03", /* I2C_SDA */
++							"reserved", 
++							"reserved", 
++							"reserved", 
++							"reserved",
++							"reserved", 
++							"reserved", 
++							"reserved", 
++							"reserved", 
++							"reserved", 
++							"reserved", 
++							"reserved", 
++							"reserved",
++							"reserved", 
++							"reserved", 
++							"reserved", 
++							"reserved", 
++							"reserved", 
++							"reserved", 
++							"CPU_IRQ", 
++							"reserved",
++							"RPI_GPIO1_24", /* SPI_MOSI */ 
++							"RPI_GPIO1_25", /* N_SPI_CE0 */
++							"RPI_GPIO1_26", /* N_SPI_CE1 */
++							"RPI_GPIO1_27", /* N_SPI_CE2 */
++							"RPI_GPIO1_28", /* SPI_MISO */
++							"RPI_GPIO1_29", /* SPI_CLK */
++							"reserved", 
++							"reserved";
++};
++
++&gpio1 {
++		ngpios = <18>;
++		gpio-line-names =   "M2_GPIO2_00", 
++							"M2_GPIO2_01", 
++							"M2_GPIO2_02",  
++							"QPSI_A_MUX_SEL", 
++							"RPI_GPIO2_04", 
++							"RPI_GPIO2_05", 
++							"RPI_GPIO2_06", 
++							"RPI_GPIO2_07",
++							"reserved", 
++							"RPI_GPIO2_09", 
++							"RPI_GPIO2_10", 
++							"M2_CFG_1", 
++							"M2_CFG_0", 
++							"M2_CFG_2", 
++							"M2_CFG_3", 
++							"reserved",
++							"reserved", 
++							"TMP_DETECT_N";
++};
++
++&esdhc0 {
++	sd-uhs-sdr104;
++	sd-uhs-sdr50;
++	sd-uhs-sdr25;
++	sd-uhs-sdr12;
++	status = "okay";
++};
++
++&pfe {
++	status = "okay";
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	pfe_mac0: ethernet@0 {
++		compatible = "fsl,pfe-gemac-port";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		reg = <0x0>;	/* GEM_ID */
++		fsl,mdio-mux-val = <0x0>;
++		phy-mode = "sgmii";
++		phy-handle = <&sgmii_phy1>;
++	};
++
++	pfe_mac1: ethernet@1 {
++		compatible = "fsl,pfe-gemac-port";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		reg = <0x1>;	/* GEM_ID */
++		fsl,mdio-mux-val = <0x0>;
++		phy-mode = "sgmii";
++		phy-handle = <&sgmii_phy2>;
++	};
++
++	mdio@0 {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		sgmii_phy1: ethernet-phy@1 {
++			reg = <0x1>;
++			compatible = "ethernet-phy-ieee802.3-c22";
++			ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
++		};
++
++		sgmii_phy2: ethernet-phy@2 {
++			reg = <0x2>;
++			compatible = "ethernet-phy-ieee802.3-c22";
++			ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/freescale/scalys-tbe401.dts b/arch/arm64/boot/dts/freescale/scalys-tbe401.dts
+new file mode 100644
+index 000000000000..9c1d5f396cc0
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/scalys-tbe401.dts
+@@ -0,0 +1,163 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Device Tree Include file for Freescale Layerscape-1046A family SoC.
++ *
++ * Copyright 2019 NXP.
++ *
++ */
++
++/dts-v1/;
++
++#include "fsl-ls1046a.dtsi"
++
++/ {
++	model = "Scalys TrustBox Edge 401";
++	compatible = "fsl,ls1046a-frwy", "fsl,ls1046a";
++
++	aliases {
++		serial0 = &duart0;
++		serial1 = &duart1;
++		serial2 = &duart2;
++		serial3 = &duart3;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	sb_3v3: regulator-sb3v3 {
++		compatible = "regulator-fixed";
++		regulator-name = "LT8642SEV-3.3V";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-boot-on;
++		regulator-always-on;
++	};
++};
++
++&duart0 {
++	status = "okay";
++};
++
++&duart1 {
++	status = "okay";
++};
++
++&duart2 {
++	status = "okay";
++};
++
++&duart3 {
++	status = "okay";
++};
++
++&i2c0 {
++	status = "okay";
++
++	i2c-mux@77 {
++		compatible = "nxp,pca9546";
++		reg = <0x77>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		i2c@0 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0>;
++
++			power-monitor@40 {
++				compatible = "ti,ina220";
++				reg = <0x40>;
++				shunt-resistor = <1000>;
++			};
++
++			temperature-sensor@4c {
++				compatible = "nxp,sa56004";
++				reg = <0x4c>;
++				vcc-supply = <&sb_3v3>;
++			};
++
++			rtc@51 {
++				compatible = "nxp,pcf2129";
++				reg = <0x51>;
++			};
++
++			eeprom@52 {
++				compatible = "onnn,cat24c04", "atmel,24c04";
++				reg = <0x52>;
++			};
++		};
++	};
++};
++
++&ifc {
++	#address-cells = <2>;
++	#size-cells = <1>;
++	/* NAND Flash */
++	ranges = <0x0 0x0 0x0 0x7e800000 0x00010000>;
++	status = "okay";
++
++	nand@0,0 {
++		compatible = "fsl,ifc-nand";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		reg = <0x0 0x0 0x10000>;
++	};
++
++};
++
++&qspi {
++	status = "okay";
++
++	mt25qu512a0: flash@0 {
++		compatible = "jedec,spi-nor";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		spi-max-frequency = <50000000>;
++		spi-rx-bus-width = <4>;
++		spi-tx-bus-width = <1>;
++		reg = <0>;
++	};
++};
++
++#include "fsl-ls1046-post.dtsi"
++
++&fman0 {
++	ethernet@e0000 {
++		phy-handle = <&qsgmii_phy4>;
++		phy-connection-type = "qsgmii";
++	};
++
++	ethernet@e8000 {
++		phy-handle = <&qsgmii_phy2>;
++		phy-connection-type = "qsgmii";
++	};
++
++	ethernet@ea000 {
++		phy-handle = <&qsgmii_phy1>;
++		phy-connection-type = "qsgmii";
++	};
++
++	ethernet@f2000 {
++		phy-handle = <&qsgmii_phy3>;
++		phy-connection-type = "qsgmii";
++	};
++
++	mdio@fd000 {
++		qsgmii_phy1: ethernet-phy@1c {
++			reg = <0x1c>;
++		};
++
++		qsgmii_phy2: ethernet-phy@1d {
++			reg = <0x1d>;
++		};
++
++		qsgmii_phy3: ethernet-phy@1e {
++			reg = <0x1e>;
++		};
++
++		qsgmii_phy4: ethernet-phy@1f {
++			reg = <0x1f>;
++		};
++	};
++};

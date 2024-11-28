@@ -9,7 +9,7 @@ require scalys-base-image.inc
 
 IMAGE_FSTYPES = "cpio.gz"
 
-IMAGE_INSTALL_remove = "\
+IMAGE_INSTALL:remove = "\
     kernel-image \
     kernel-devicetree \
 "

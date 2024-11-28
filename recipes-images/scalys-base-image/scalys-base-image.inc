@@ -4,7 +4,7 @@ LICENSE = "GPLV2"
 LIC_FILES_CHKSUM = ""
 
 
-require recipes-core/images/core-image-minimal.bb
+require recipes-core/images/core-image-base.bb
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
@@ -23,13 +23,9 @@ IMAGE_INSTALL += "\
     udev-extraconf \
     udev-rules-qoriq \
     \
-    dhcp-client \
     kernel-module-8723bu \
-    linux-firmware-rtl8723bu-bt \
-    linux-firmware-rtl8723bu-nic \
     iw \
     wpa-supplicant \
-    crda \
     \
     mtd-utils \
     mtd-utils-ubifs \

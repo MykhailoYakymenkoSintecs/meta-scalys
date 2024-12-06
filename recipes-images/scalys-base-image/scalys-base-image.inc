@@ -16,17 +16,9 @@ IMAGE_INSTALL += "\
     kernel-devicetree \
     kernel-modules \
     \
-    optee-client-qoriq \
-    \
-    ppfe-firmware \
-    \
-    udev-extraconf \
-    udev-rules-qoriq \
-    \
-    kernel-module-8723bu \
-    iw \
-    wpa-supplicant \
+    ${@bb.utils.contains('MACHINE_FEATURES', 'optee', 'optee-client-qoriq', '', d)} \
     \
     mtd-utils \
     mtd-utils-ubifs \
 "
+

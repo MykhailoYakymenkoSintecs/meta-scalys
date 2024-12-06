@@ -16,7 +16,6 @@ IMAGE_INSTALL += "\
     aziot-edged \
     aziotd \
     aziot-keys \
-    composite-firmware \
     u-boot-mmc-boot \
 "
 

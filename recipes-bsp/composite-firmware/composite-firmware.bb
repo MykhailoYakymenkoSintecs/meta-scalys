@@ -7,7 +7,7 @@ inherit deploy
 DEPENDS += "qoriq-atf ppfe-firmware"
 do_compile[depends] += "qoriq-atf:do_deploy ppfe-firmware:do_deploy"
 
-COMPATIBLE_MACHINE = "(qoriq)"
+COMPATIBLE_MACHINE = "(ls1012a)"
 
 do_configure[noexec] = "1"
 

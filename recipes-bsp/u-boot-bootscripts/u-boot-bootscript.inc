@@ -13,7 +13,9 @@ SRC_URI += "\
 
 inherit kernel-arch
 
-BOOT_SCRIPT_DESTNAME = "tbe101_boot.scr"
+BOOT_SCRIPT_DESTNAME ?= ""
+BOOT_SCRIPT_DESTNAME:trustbox-edge-101 = "tbe101_boot.scr"
+BOOT_SCRIPT_DESTNAME:trustbox-edge-401 = "tbe401_boot.scr"
 
 do_compile() {
     uboot-mkimage -A ${UBOOT_ARCH} -O linux -T script -C none -a 0 -e 0 -n "${BOOT_SCRIPT_DESC}" -d "${WORKDIR}/${BOOT_SCRIPT}" ${BOOT_SCRIPT_DESTNAME}

@@ -1,4 +1,4 @@
-From eb54b5c77cd3f2d0a4a01fd7bc64c809465e319c Mon Sep 17 00:00:00 2001
+From 3b1bea0d38f0e9d3e93954488df237b597211290 Mon Sep 17 00:00:00 2001
 From: Ting Liu <ting.liu@nxp.com>
 Date: Fri, 9 Oct 2020 21:15:34 +0530
 Subject: [PATCH] add typedef to avoid multiple definition issue

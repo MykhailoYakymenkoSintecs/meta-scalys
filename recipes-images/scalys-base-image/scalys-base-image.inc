@@ -12,8 +12,7 @@ IMAGE_FSTYPES = "tar.gz ubi"
 #IMAGE_FSTYPES = "tar.gz ext2.gz ext2.gz.u-boot jffs2 ubi"
 
 IMAGE_INSTALL += "\
-    kernel-image \
-    kernel-devicetree \
+    kernel-image-fitimage \
     kernel-modules \
     \
     ${@bb.utils.contains('MACHINE_FEATURES', 'optee', 'optee-client-qoriq', '', d)} \

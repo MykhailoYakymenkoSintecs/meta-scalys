@@ -15,6 +15,7 @@ inherit kernel-arch
 
 BOOT_SCRIPT_DESTNAME ?= ""
 BOOT_SCRIPT_DESTNAME:trustbox-edge-101 = "tbe101_boot.scr"
+BOOT_SCRIPT_DESTNAME:trustbox-edge-201 = "tbe201_boot.scr"
 BOOT_SCRIPT_DESTNAME:trustbox-edge-401 = "tbe401_boot.scr"
 
 do_compile() {
